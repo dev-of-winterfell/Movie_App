@@ -11,7 +11,7 @@ class WatchMapper @Inject constructor() {
         val isTvShow = input.first_air_date != null
         return WatchContent(
             id = input.id,
-            title = input.title ?: input.name ?: "", // Add fallback to name field
+            title = input.title ?: input.name ?: "", 
             posterUrl = input.poster_path?.let { "https://image.tmdb.org/t/p/w500$it" } ?: "",
             description = input.overview,
             releaseDate = input.release_date ?: input.first_air_date ?: "",
