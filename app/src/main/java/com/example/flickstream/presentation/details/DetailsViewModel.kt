@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class DetailsViewModel @Inject constructor(
+
+class DetailsViewModel (
     private val getContentDetailsUseCase: GetContentDetailsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<DetailsState>(DetailsState.Loading)

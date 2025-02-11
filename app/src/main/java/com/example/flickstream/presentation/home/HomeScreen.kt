@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flickstream.presentation.home.components.*
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = koinViewModel(),
     onNavigateToDetails: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
@@ -23,16 +24,23 @@ fun HomeScreen(
         AnimatedContent(targetState = state) { currentState ->
             when (currentState) {
                 is HomeState.Loading -> ShimmerContent()
-                is HomeState.Success ->
+                is HomeState.Success -> {
+                    // Display movies or TV shows based on contentType
+                    val contents = when (contentType) {
+                        ContentType.MOVIES -> currentState.movies
+                        ContentType.TV_SHOWS -> currentState.tvShows
+                    }
                     ContentGrid(
-                        contents = currentState.contents,
+                        contents = contents,
                         onItemClick = onNavigateToDetails,
                     )
-                is HomeState.Error ->
+                }
+                is HomeState.Error -> {
                     ErrorContent(
                         message = currentState.message,
                         onRetry = viewModel::loadContent,
                     )
+                }
             }
         }
     }

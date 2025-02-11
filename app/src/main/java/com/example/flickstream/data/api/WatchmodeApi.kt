@@ -23,22 +23,6 @@ interface WatchmodeApi {
         @Query("page") page: Int = 1
     ): Single<WatchContentListResponse>
 
-    @GET("movie/{content_id}")
-    fun getContentDetails(
-        @Path("content_id") contentId: String,
-        @Query("language") language: String = "en-US"
-    ): Single<WatchContentResponse>
-
-    // Coroutine endpoints
-    @GET("trending/movie/day")
-    suspend fun getTrendingMovies(
-        @Query("language") language: String = "en-US"
-    ): WatchContentListResponse
-
-    @GET("trending/tv/day")
-    suspend fun getTrendingTvShows(
-        @Query("language") language: String = "en-US"
-    ): WatchContentListResponse
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
@@ -46,20 +30,12 @@ interface WatchmodeApi {
         @Query("language") language: String = "en-US"
     ): WatchContentResponse
 
-    @GET("trending/tv/day")
-    fun getTrendingTVShows(): Single<BaseResponse<TvShow>>
 
     @GET("tv/{tv_id}")
     suspend fun getTvShowDetails(
         @Path("tv_id") tvId: String,
         @Query("language") language: String = "en-US"
     ): WatchContentResponse
-    @GET("search/multi")
-    suspend fun searchContent(
-        @Query("query") query: String,
-        @Query("language") language: String = "en-US",
-        @Query("page") page: Int = 1
-    ): WatchContentListResponse
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/"

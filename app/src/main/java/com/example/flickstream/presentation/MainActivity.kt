@@ -19,7 +19,6 @@ import com.example.flickstream.presentation.navigation.WatchAppNavigation
 import com.example.flickstream.presentation.theme.FlickStreamTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Your NavHost or initial screen should be here
-                    WatchAppNavigation() // or your root composable
+                    WatchAppNavigation()
                 }
             }
         }

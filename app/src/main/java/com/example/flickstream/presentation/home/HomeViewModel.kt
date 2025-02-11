@@ -1,21 +1,16 @@
 package com.example.flickstream.presentation.home
 
 import androidx.lifecycle.ViewModel
-import com.example.flickstream.domain.usecase.GetMoviesUseCase
-import com.example.flickstream.domain.usecase.GetTvShowsUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.flickstream.domain.usecase.GetMoviesAndTvShowsUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getMoviesUseCase: GetMoviesUseCase,
-    private val getTvShowsUseCase: GetTvShowsUseCase
+class HomeViewModel(
+    private val getMoviesAndTvShowsUseCase: GetMoviesAndTvShowsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state: StateFlow<HomeState> = _state.asStateFlow()
@@ -31,22 +26,19 @@ class HomeViewModel @Inject constructor(
 
     fun setContentType(type: ContentType) {
         _contentType.value = type
-        loadContent()
     }
 
     fun loadContent() {
         _state.value = HomeState.Loading
 
-        val useCase = when (_contentType.value) {
-            ContentType.MOVIES -> getMoviesUseCase()
-            ContentType.TV_SHOWS -> getTvShowsUseCase()
-        }
-
-        useCase
+        getMoviesAndTvShowsUseCase()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ contents ->
-                _state.value = HomeState.Success(contents)
+            .subscribe({ (movies, tvShows) ->
+                _state.value = HomeState.Success(
+                    movies = movies,
+                    tvShows = tvShows
+                )
             }, { error ->
                 _state.value = HomeState.Error(error.message ?: "Unknown error occurred")
             })

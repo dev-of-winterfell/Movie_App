@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.flickstream.presentation.details.components.DetailContent
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -22,7 +23,7 @@ fun DetailsScreen(
     contentId: String,
     contentType: String,
     onNavigateBack: () -> Unit,
-    viewModel: DetailsViewModel = hiltViewModel()
+    viewModel: DetailsViewModel =  koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()

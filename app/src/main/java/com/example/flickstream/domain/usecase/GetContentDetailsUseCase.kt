@@ -4,7 +4,7 @@ import com.example.flickstream.data.model.WatchContent
 import com.example.flickstream.data.repository.WatchRepository
 import javax.inject.Inject
 
-class GetContentDetailsUseCase @Inject constructor(
+class GetContentDetailsUseCase(
     private val repository: WatchRepository
 ) {
     suspend operator fun invoke(contentId: String, isMovie: Boolean): WatchContent {

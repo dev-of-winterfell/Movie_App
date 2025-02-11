@@ -1,40 +1,23 @@
 package com.example.flickstream.di
 
-import android.content.Context
 import com.example.flickstream.WatchApplication
-import com.example.flickstream.data.mapper.WatchMapper
-import com.example.flickstream.data.repository.WatchRepository
-import com.example.flickstream.domain.usecase.GetMoviesUseCase
-import com.example.flickstream.domain.usecase.GetTvShowsUseCase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import com.example.flickstream.domain.usecase.GetContentDetailsUseCase
+import com.example.flickstream.domain.usecase.GetMoviesAndTvShowsUseCase
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
+import com.example.flickstream.presentation.details.DetailsViewModel
+import com.example.flickstream.presentation.home.HomeViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
 
-    @Provides
-    @Singleton
-    fun provideApplication(@ApplicationContext context: Context): WatchApplication {
-        return context as WatchApplication
-    }
+val appModule = module {
+    // Application
+    single { WatchApplication() }
 
-    @Provides
-    @Singleton
-    fun provideGetMoviesUseCase(repository: WatchRepository): GetMoviesUseCase {
-        return GetMoviesUseCase(repository)
-    }
+    // UseCases
+    factory { GetMoviesAndTvShowsUseCase(get()) }
+    factory { GetContentDetailsUseCase(get()) }
 
-    @Provides
-    @Singleton
-    fun provideGetTvShowsUseCase(
-        repository: WatchRepository,
-        mapper: WatchMapper
-    ): GetTvShowsUseCase {
-        return GetTvShowsUseCase(repository, mapper)
-    }
+    // ViewModels
+    viewModel { HomeViewModel(get()) }  // Only passing GetMoviesAndTvShowsUseCase
+    viewModel { DetailsViewModel(get()) }
 }

@@ -2,7 +2,7 @@ package com.example.flickstream.data.model.response
 
 data class WatchContentResponse(
     val id: String,
-    val title: String,
+    val title: String?,
     val overview: String,
     val poster_path: String?,
     val backdrop_path: String?,
